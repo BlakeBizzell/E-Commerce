@@ -23,5 +23,5 @@ model users {
   firstName String?
   lastName  String?
   email     String?
-  admin     String?
+  admin     Boolean @default(false) 
 }
