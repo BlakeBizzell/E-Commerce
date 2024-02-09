@@ -9,6 +9,7 @@ const {
   deleteProduct,
 } = require("../db/product");
 
+// get all products
 router.get("/products", async (req, res, next) => {
   try {
     const products = await getAllProducts();
@@ -18,6 +19,7 @@ router.get("/products", async (req, res, next) => {
   }
 });
 
+// get product by id
 router.get("/products/:id", async (req, res, next) => {
   try {
     const product = await getProductById(req.params.id);
@@ -28,6 +30,7 @@ router.get("/products/:id", async (req, res, next) => {
   }
 });
 
+// post product
 router.post("/products", async (req, res, next) => {
   try {
     const product = await createNewProduct(req);
@@ -37,15 +40,17 @@ router.post("/products", async (req, res, next) => {
   }
 });
 
+// update product
 router.put("/products/:id", async (req, res, next) => {
   try {
-    const product = await updateProduct(req);
+    const product = await updateProduct(req.params.id, req);
     res.send(product);
   } catch (err) {
     next(err);
   }
 });
 
+// delete product
 router.delete("/products/:id", async (req, res, next) => {
   try {
     const product = await deleteProduct(req);

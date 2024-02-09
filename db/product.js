@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+// get all products
 const getAllProducts = async () => {
   try {
     return await prisma.product.findMany();
@@ -9,6 +10,7 @@ const getAllProducts = async () => {
   }
 };
 
+// get product by id
 const getProductById = async (id) => {
   try {
     return await prisma.product.findFirst({
@@ -21,8 +23,8 @@ const getProductById = async (id) => {
   }
 };
 
+// create new product
 const createNewProduct = async (req) => {
-  console.log(req.body);
   try {
     return await prisma.product.create({
       data: {
@@ -38,17 +40,19 @@ const createNewProduct = async (req) => {
   }
 };
 
+// update product
 const updateProduct = async (id, req) => {
+  const { name, price, image, description } = req.body;
   try {
     const updateProduct = await prisma.product.update({
       where: {
         id: Number(id),
       },
       data: {
-        name: req.body.name,
-        price: req.body.price,
-        image: req.body.image,
-        description: req.body.description,
+        name: name ? name : undefined,
+        price: price ? price : undefined,
+        image: image ? image : undefined,
+        description: description ? description : undefined,
         class: req.body.class,
       },
     });
@@ -58,6 +62,7 @@ const updateProduct = async (id, req) => {
   }
 };
 
+// delete product
 const deleteProduct = async (req) => {
   try {
     const Product = await prisma.product.delete({
