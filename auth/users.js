@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 const {
   getAllUsers,
   getUserById,
+  loginUser,
   createNewUser,
   updateUser,
   deleteUser,
@@ -30,8 +31,21 @@ router.get("/users/:id", async (req, res, next) => {
   }
 });
 
-// new user
-router.post("/users", async (req, res, next) => {
+// user login
+router.post("/users/login", async (req, res, next) => {
+  const { username, password } = req.body;
+  try {
+    const login = await loginUser(username, password);
+    res
+      .status(201)
+      .send(`Successful login. Here is your token: ${login.token}`);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// register new user
+router.post("/users/register", async (req, res, next) => {
   try {
     const user = await createNewUser(req);
     res.status(201).send(user);

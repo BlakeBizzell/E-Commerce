@@ -1,5 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // get all users
 const getAllUsers = async () => {
@@ -25,15 +27,18 @@ const getUserById = async (id) => {
 
 // create new user
 const createNewUser = async (req) => {
+  const { username, password, firstName, lastName, email, admin } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);
   try {
     return await prisma.users.create({
       data: {
-        username: req.body.username,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        admin: req.body.admin,
+        username: username,
+        password: hashPassword,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        admin: admin,
       },
     });
   } catch (err) {
@@ -41,21 +46,43 @@ const createNewUser = async (req) => {
   }
 };
 
+// user login
+async function loginUser(username, password) {
+  const user = await prisma.users.findUnique({
+    where: {
+      username: username,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+  const token = jwt.sign(
+    { userId: user.id, email: user.email },
+    process.env.WEB_TOKEN,
+    { expiresIn: "1w" }
+  );
+
+  return { user, token };
+}
+
 // update user
 const updateUser = async (id, req) => {
   const { username, password, firstName, lastName, email, admin } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);
   try {
     const updateUser = await prisma.users.update({
       where: {
         id: Number(id),
       },
       data: {
-        username: req.body.username,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        admin: req.body.admin,
+        username: username,
+        password: hashPassword,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        admin: admin,
       },
     });
     return updateUser;
@@ -82,6 +109,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   createNewUser,
+  loginUser,
   updateUser,
   deleteUser,
 };
