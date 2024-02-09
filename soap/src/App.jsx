@@ -1,7 +1,12 @@
 import "./App.css";
+import GetAllProducts from "../components/products";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <GetAllProducts />
+    </>
+  );
 }
 
 export default App;
