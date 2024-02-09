@@ -9,7 +9,7 @@ const GetAllProducts = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await useGetProductsQuery(); 
+        const { data } = await useGetProductsQuery();
         setProducts(data.products);
         setLoading(false);
       } catch (error) {
