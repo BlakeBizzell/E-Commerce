@@ -46,7 +46,7 @@ describe("Token Verification Endpoint", () => {
   });
 
   it("should return 200 if token is valid", async () => {
-    // Create   
+    // Create
     const payload = { username: "testuser" };
     const token = jwt.sign(payload, secretKey);
 
@@ -73,3 +73,8 @@ describe("Token Verification Endpoint", () => {
     expect(response.body.username).toBe("testuser");
   });
 });
+
+global.teardown = async () => {
+  await closeDatabaseConnection();
+  await shutdownServers();
+};
