@@ -25,3 +25,11 @@ model users {
   email     String?
   admin     Boolean @default(false)
 }
+
+model images {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  mime_type  String?
+  data       Bytes?
+  created_at DateTime @default(now())
+}
