@@ -76,10 +76,56 @@ const deleteProduct = async (req) => {
   }
 };
 
+// const addToCart = async (userId, productId) => {
+//   try {
+//     // Check if the user already has a cart
+//     let userCart = await prisma.cart.findUnique({
+//       where: {
+//         userId: userId,
+//       },
+//     });
+
+//     // If the user doesn't have a cart, create one
+//     if (!userCart) {
+//       userCart = await prisma.cart.create({
+//         data: {
+//           user: {
+//             connect: {
+//               id: userId,
+//             },
+//           },
+//         },
+//       });
+//     }
+
+//     // Add the product to the user's cart
+//     await prisma.cartItem.create({
+//       data: {
+//         cart: {
+//           connect: {
+//             id: userCart.id,
+//           },
+//         },
+//         product: {
+//           connect: {
+//             id: productId,
+//           },
+//         },
+//         quantity: 1, 
+//       },
+//     });
+
+//     return { success: true, message: "Product added to cart successfully" };
+//   } catch (err) {
+//     throw err;
+//   }
+// };
+
 module.exports = {
   getAllProducts,
   getProductById,
   createNewProduct,
   updateProduct,
   deleteProduct,
+  addToCart,
 };

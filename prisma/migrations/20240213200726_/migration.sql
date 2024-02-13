@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "product" ALTER COLUMN "image" DROP NOT NULL,
+ALTER COLUMN "image" SET DATA TYPE TEXT;

@@ -3,7 +3,7 @@ CREATE TABLE "product" (
     "id" SERIAL NOT NULL,
     "name" TEXT,
     "price" DOUBLE PRECISION,
-    "image" TEXT,
+    "image" TEXT[],
     "description" TEXT,
     "class" TEXT,
 
@@ -22,3 +22,6 @@ CREATE TABLE "users" (
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
