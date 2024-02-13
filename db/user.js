@@ -105,6 +105,21 @@ const deleteUser = async (req) => {
   }
 };
 
+const findUserByToken = async (req) => {
+  try {
+    const token = req.token;
+    const user = await User.findOne({ token });
+
+    if (user) {
+      return user;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error finding user by token:", error);
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -112,4 +127,5 @@ module.exports = {
   loginUser,
   updateUser,
   deleteUser,
+  findUserByToken,
 };

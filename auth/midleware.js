@@ -1,4 +1,4 @@
-const { findUserByToken } = require("../db/users");
+const { findUserByToken } = require("../db/user");
 
 const isLoggedIn = async (req, res, next) => {
   try {

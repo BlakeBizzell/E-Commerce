@@ -9,6 +9,10 @@ const {
   updateUser,
   deleteUser,
 } = require("../db/user");
+  
+const {isLoggedIn} = require("./midleware");
+
+router.use(isLoggedIn)
 
 // get all users
 router.get("/users", async (req, res, next) => {
@@ -18,6 +22,10 @@ router.get("/users", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+router.get("/users/verify-token", async (req, res, next) => {
+  const test = await getUserById("Foo");
+  res.status(401).send(test);
 });
 
 // get user by id
@@ -36,9 +44,10 @@ router.post("/users/login", async (req, res, next) => {
   const { username, password } = req.body;
   try {
     const login = await loginUser(username, password);
-    res
-      .status(201)
-      .send(`Successful login. Here is your token: ${login.token}`);
+    res.status(201).json({
+      message: "Successful login",
+      token: login.token,
+    });
   } catch (err) {
     next(err);
   }
