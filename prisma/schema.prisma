@@ -14,7 +14,8 @@ model Product {
   image       String?
   description String?
   class       String?
-  cart        Cart[]
+  carts       Cart[]
+  cartItems   CartItem[]
 }
 
 
@@ -61,4 +62,3 @@ model Token {
   user        Users?     @relation(fields: [userId], references: [id])
   userId      Int?
 }
- 
