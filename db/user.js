@@ -46,12 +46,37 @@ const createNewUser = async (req) => {
   }
 };
 
-// user login
+// Create a new token entry in the database
+const createToken = async (userId, token, expirationDate) => {
+  try {
+    await prisma.token.create({
+      data: {
+        tokens: {
+          create: [
+            {
+              token: token,
+              expiration: expirationDate,
+              user: {
+                connect: { id: userId },
+              },
+            },
+          ],
+        },
+        expiration: expirationDate,
+      },
+    });
+
+    console.log("Token created and stored successfully in the database.");
+  } catch (error) {
+    console.error("Error storing token in the database:", error);
+    throw error;
+  }
+};
+
+// User login
 async function loginUser(username, password) {
   const user = await prisma.users.findUnique({
-    where: {
-      username: username,
-    },
+    where: { username: username },
   });
 
   if (!user) {
@@ -64,18 +89,13 @@ async function loginUser(username, password) {
     { expiresIn: "1w" }
   );
 
-  await prisma.users.update({
-    where: { id: user.id },
-    data: {
-      tokens: {
-        create: {
-          expiration: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Setting the expiration time
-        },
-      },
-    },
-  });
+  const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-  return { user, token };
+  // Call createToken function to store the token in the database
+  await createToken(user.id, token, expirationDate);
+
+  // Return the user and token information
+  return { user: { id: user.id, username: user.username }, token };
 }
 
 // update user

@@ -12,7 +12,7 @@ const isLoggedIn = async (req, res, next) => {
     if (!userId) {
       throw new Error("User not authorized");
     }
-
+    console.log(userId);
     req.userId = userId;
     next();
   } catch (error) {
