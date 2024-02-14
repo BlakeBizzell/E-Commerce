@@ -47,25 +47,19 @@ const createNewUser = async (req) => {
 };
 
 // Create a new token entry in the database
-const createToken = async (userId, token, expirationDate) => {
+const createToken = async (userId, token, expirationDate, currentDate) => {
   console.log("token: ", token);
   console.log("id: ", userId);
   console.log("expiration: ", expirationDate);
   try {
     await prisma.token.create({
       data: {
-        tokens: {
-          create: [
-            {
-              token: token,
-              expiration: expirationDate,
-              user: {
-                connect: { id: userId },
-              },
-            },
-          ],
-        },
+        createdAt: currentDate,
+        updatedAt: currentDate,
+        valid: true,
         expiration: expirationDate,
+        userId: userId,
+        tokens: token,
       },
     });
 
@@ -93,10 +87,11 @@ async function loginUser(username, password) {
   );
   console.log(token);
 
-  const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const currentDate = new Date();
+  const expirationDate = new Date();
 
   // Call createToken function to store the token in the database
-  await createToken(user.id, token, expirationDate);
+  await createToken(user.id, token, expirationDate, currentDate);
 
   // Return the user and token information
   return { user: { id: user.id, username: user.username }, token };
