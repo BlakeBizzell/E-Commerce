@@ -48,6 +48,9 @@ const createNewUser = async (req) => {
 
 // Create a new token entry in the database
 const createToken = async (userId, token, expirationDate) => {
+  console.log("token: ", token);
+  console.log("id: ", userId);
+  console.log("expiration: ", expirationDate);
   try {
     await prisma.token.create({
       data: {
@@ -88,6 +91,7 @@ async function loginUser(username, password) {
     process.env.WEB_TOKEN,
     { expiresIn: "1w" }
   );
+  console.log(token);
 
   const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
