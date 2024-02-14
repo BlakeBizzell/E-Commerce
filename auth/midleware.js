@@ -2,7 +2,7 @@ const { findUserByToken } = require("../db/user");
 
 const isLoggedIn = async (req, res, next) => {
   try {
-    const user = await findUserByToken(req.headers.authorization);
+    const user = await findUserByToken(req);
     req.user = user;
     next();
   } catch (ex) {

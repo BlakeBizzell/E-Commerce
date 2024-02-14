@@ -107,16 +107,17 @@ const deleteUser = async (req) => {
 
 const findUserByToken = async (req) => {
   try {
-    const token = req.token;
-    const user = await User.findOne({ token });
+    const token = req.headers.authorization.split(" ")[1];
+    const user = await prisma.users.findFirst({
+      where: {
+        token: token,
+      },
+    });
 
-    if (user) {
-      return user;
-    } else {
-      return null;
-    }
+    return user;
   } catch (error) {
     console.error("Error finding user by token:", error);
+    throw error;
   }
 };
 
