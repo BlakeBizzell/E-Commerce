@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Token" ALTER COLUMN "tokens" SET NOT NULL,
+ALTER COLUMN "tokens" SET DATA TYPE TEXT;

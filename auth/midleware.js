@@ -6,8 +6,8 @@ const isLoggedIn = async (req, res, next) => {
   }
 
   try {
-    const token = req.headers.authorization.replace("Bearer ", "");
-    const userId = await findUserByToken(token);
+    // const token = req.headers.authorization.replace("Bearer ", "");
+    const userId = await findUserByToken(userId);
 
     if (!userId) {
       throw new Error("User not authorized");
