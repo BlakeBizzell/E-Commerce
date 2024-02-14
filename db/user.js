@@ -48,7 +48,7 @@ const createNewUser = async (req) => {
 
 // user login
 async function loginUser(username, password) {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.users.findUnique({
     where: {
       username: username,
     },
@@ -64,7 +64,7 @@ async function loginUser(username, password) {
     { expiresIn: "1w" }
   );
 
-  await prisma.user.update({
+  await prisma.users.update({
     where: { id: user.id },
     data: {
       tokens: {
@@ -124,7 +124,7 @@ const findUserByToken = async (token) => {
       throw new Error("Token is missing");
     }
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.users.findFirst({
       where: {
         tokens: {
           some: {

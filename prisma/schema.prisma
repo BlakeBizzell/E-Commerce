@@ -20,7 +20,7 @@ model Product {
 
 
 
-model User {
+model Users {
   id          Int       @id @default(autoincrement())
   username    String?   @unique
   password    String?
@@ -35,7 +35,7 @@ model User {
 
 model Cart {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      Users     @relation(fields: [userId], references: [id])
   userId    Int
   product   Product  @relation(fields: [productId], references: [id])
   productId Int
@@ -44,7 +44,7 @@ model Cart {
 
 model CartItem {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      Users     @relation(fields: [userId], references: [id])
   userId    Int
   product   Product  @relation(fields: [productId], references: [id])
   productId Int
@@ -59,6 +59,7 @@ model Token {
   updatedAt   DateTime  @updatedAt
   valid       Boolean   @default(true)
   expiration  DateTime
-  user        User?     @relation(fields: [userId], references: [id])
+  user        Users?     @relation(fields: [userId], references: [id])
   userId      Int?
 }
+ 
