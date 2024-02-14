@@ -111,7 +111,7 @@ const deleteProduct = async (req) => {
 //             id: productId,
 //           },
 //         },
-//         quantity: 1, 
+//         quantity: 1,
 //       },
 //     });
 
@@ -127,5 +127,4 @@ module.exports = {
   createNewProduct,
   updateProduct,
   deleteProduct,
-  addToCart,
 };
