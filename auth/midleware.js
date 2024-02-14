@@ -1,16 +1,23 @@
 const { findUserByToken } = require("../db/user");
 
 const isLoggedIn = async (req, res, next) => {
-  if (req.path === "/users/login" || req.path === "users/register") {
+  if (req.path === "/users/login" || req.path === "/users/register") {
     return next();
   }
 
   try {
-    const user = await findUserByToken(req);
-    req.user = user;
+    const token = req.headers.authorization.replace("Bearer ", "");
+    const userId = await findUserByToken(token);
+
+    if (!userId) {
+      throw new Error("User not authorized");
+    }
+
+    req.userId = userId;
     next();
   } catch (error) {
-    next(error);
+    console.error("Error in isLoggedIn middleware:", error);
+    res.status(401).send("Unauthorized access");
   }
 };
 
