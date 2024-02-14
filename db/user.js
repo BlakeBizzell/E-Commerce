@@ -124,21 +124,22 @@ const findUserByToken = async (token) => {
       throw new Error("Token is missing");
     }
 
-    const user = await prisma.users.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         tokens: {
-          some: {
-            token: token,
-          },
+          some: { token: token },
         },
+      },
+      select: {
+        id: true,
       },
     });
 
     if (!user) {
       throw new Error("User not found for the provided token");
     }
-
-    return user;
+    console.log(user.id);
+    return user.id;
   } catch (error) {
     console.error("Error finding user by token:", error);
     throw error;

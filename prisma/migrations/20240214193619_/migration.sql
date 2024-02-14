@@ -1,26 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `cart` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `product` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `users` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "cart" DROP CONSTRAINT "cart_productId_fkey";
-
--- DropForeignKey
-ALTER TABLE "cart" DROP CONSTRAINT "cart_userId_fkey";
-
--- DropTable
-DROP TABLE "cart";
-
--- DropTable
-DROP TABLE "product";
-
--- DropTable
-DROP TABLE "users";
-
 -- CreateTable
 CREATE TABLE "Product" (
     "id" SERIAL NOT NULL,
@@ -34,7 +11,7 @@ CREATE TABLE "Product" (
 );
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
     "username" TEXT,
     "password" TEXT,
@@ -43,7 +20,7 @@ CREATE TABLE "User" (
     "email" TEXT,
     "admin" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -79,22 +56,22 @@ CREATE TABLE "Token" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+CREATE UNIQUE INDEX "Users_username_key" ON "Users"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CartItem_userId_productId_key" ON "CartItem"("userId", "productId");
 
 -- AddForeignKey
-ALTER TABLE "Cart" ADD CONSTRAINT "Cart_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Cart" ADD CONSTRAINT "Cart_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Cart" ADD CONSTRAINT "Cart_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
