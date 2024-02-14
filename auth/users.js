@@ -9,10 +9,10 @@ const {
   updateUser,
   deleteUser,
 } = require("../db/user");
-  
-const {isLoggedIn} = require("./midleware");
 
-router.use(isLoggedIn)
+const { isLoggedIn } = require("./midleware");
+
+router.use(isLoggedIn);
 
 // get all users
 router.get("/users", async (req, res, next) => {
@@ -43,13 +43,11 @@ router.get("/users/:id", async (req, res, next) => {
 router.post("/users/login", async (req, res, next) => {
   const { username, password } = req.body;
   try {
-    const login = await loginUser(username, password);
-    res.status(201).json({
-      message: "Successful login",
-      token: login.token,
-    });
-  } catch (err) {
-    next(err);
+    const { user, token } = await loginUser(username, password);
+    // Assuming loginUser function handles the login logic.
+    res.status(200).json({ user, token });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
   }
 });
 

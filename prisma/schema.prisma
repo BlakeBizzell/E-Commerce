@@ -14,8 +14,7 @@ model Product {
   image       String?
   description String?
   class       String?
-  carts       Cart[]  
-  cartItems   CartItem[]
+  cart        Cart[]
 }
 
 

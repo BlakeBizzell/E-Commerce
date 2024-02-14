@@ -48,7 +48,7 @@ const createNewUser = async (req) => {
 
 // user login
 async function loginUser(username, password) {
-  const user = await prisma.users.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       username: username,
     },
@@ -57,11 +57,23 @@ async function loginUser(username, password) {
   if (!user) {
     throw new Error("User not found");
   }
+
   const token = jwt.sign(
     { userId: user.id, email: user.email },
     process.env.WEB_TOKEN,
     { expiresIn: "1w" }
   );
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      tokens: {
+        create: {
+          expiration: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Setting the expiration time
+        },
+      },
+    },
+  });
 
   return { user, token };
 }
@@ -105,14 +117,26 @@ const deleteUser = async (req) => {
   }
 };
 
-const findUserByToken = async (req) => {
+// find user by token
+const findUserByToken = async (token) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const user = await prisma.users.findFirst({
+    if (!token) {
+      throw new Error("Token is missing");
+    }
+
+    const user = await prisma.user.findFirst({
       where: {
-        token: token,
+        tokens: {
+          some: {
+            token: token,
+          },
+        },
       },
     });
+
+    if (!user) {
+      throw new Error("User not found for the provided token");
+    }
 
     return user;
   } catch (error) {
