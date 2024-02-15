@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+
+
 const {
   getAllUsers,
   getUserById,
@@ -10,9 +12,17 @@ const {
   deleteUser,
 } = require("../db/user");
 
-// const { isLoggedIn } = require("./midleware");
+const { isLoggedIn } = require("./midleware");
 
-// router.use(isLoggedIn);
+router.put("/users/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    const userId = req.userId; // Using userId obtained from the middleware
+    const user = await updateUser(userId, req);
+    res.send(user);
+  } catch (err) {
+    next(err);
+  }
+});
 
 // get all users
 router.get("/users", async (req, res, next) => {

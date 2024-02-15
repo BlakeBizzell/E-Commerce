@@ -1,14 +1,11 @@
 const { findUserByToken } = require("../db/user");
 
-const isLoggedIn = async (req, res, next) => {
+const isLoggedIn = async (req, res, next, userId) => {
   if (req.path === "/users/login" || req.path === "/users/register") {
     return next();
   }
 
   try {
-    // const token = req.headers.authorization.replace("Bearer ", "");
-    const userId = await findUserByToken(userId);
-
     if (!userId) {
       throw new Error("User not authorized");
     }
