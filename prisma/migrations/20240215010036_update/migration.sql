@@ -50,7 +50,8 @@ CREATE TABLE "Token" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "valid" BOOLEAN NOT NULL DEFAULT true,
     "expiration" TIMESTAMP(3) NOT NULL,
-    "userId" INTEGER,
+    "tokens" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Token_pkey" PRIMARY KEY ("id")
 );
@@ -74,4 +75,4 @@ ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_userId_fkey" FOREIGN KEY ("userI
 ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
