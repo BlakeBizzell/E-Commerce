@@ -2,9 +2,6 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const addToCart = async (userId, productId, quantity) => {
-  console.log("user id:", userId);
-  console.log("product id:", productId);
-  console.log("quantity:", quantity);
   try {
     const user = await prisma.users.findUnique({
       where: { id: parseInt(userId) },
