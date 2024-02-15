@@ -2,7 +2,6 @@ const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-
 const {
   getAllUsers,
   getUserById,
@@ -14,18 +13,8 @@ const {
 
 const { isLoggedIn } = require("./midleware");
 
-router.put("/users/:id", isLoggedIn, async (req, res, next) => {
-  try {
-    const userId = req.userId; // Using userId obtained from the middleware
-    const user = await updateUser(userId, req);
-    res.send(user);
-  } catch (err) {
-    next(err);
-  }
-});
-
 // get all users
-router.get("/users", async (req, res, next) => {
+router.get("/users", isLoggedIn, async (req, res, next) => {
   try {
     const users = await getAllUsers();
     res.send(users);
@@ -54,7 +43,6 @@ router.post("/users/login", async (req, res, next) => {
   const { username, password } = req.body;
   try {
     const { user, token } = await loginUser(username, password);
-    // Assuming loginUser function handles the login logic.
     res.status(200).json({ user, token });
   } catch (error) {
     res.status(401).json({ error: error.message });

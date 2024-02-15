@@ -3,7 +3,6 @@ const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-
 // get all users
 const getAllUsers = async () => {
   try {
@@ -144,24 +143,21 @@ const findUserByToken = async (token) => {
       throw new Error("Token is missing");
     }
 
-    const user = await prisma.user.findFirst({
+    const tokenEntry = await prisma.token.findFirst({
       where: {
-        tokens: {
-          some: { token: token },
-        },
+        tokens: token,
       },
-      select: {
-        id: true,
-      },
+      select: { id: true },
     });
 
-    if (!user) {
-      throw new Error("User not found for the provided token");
+    if (!tokenEntry) {
+      throw new Error("Token not found in database");
     }
-    console.log(user.id);
-    return user.id;
+
+    console.log("Token found in the database");
+    return true;
   } catch (error) {
-    console.error("Error finding user by token:", error);
+    console.error("Error finding token in database:", error);
     throw error;
   }
 };
