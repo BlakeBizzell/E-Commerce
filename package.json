@@ -4,9 +4,10 @@
   "description": "miro link for project board https://miro.com/app/board/uXjVNvAZoNc=/?share_link_id=338192230873",
   "main": "index.js",
   "scripts": {
-    "seed": "node ./db/seed.js",
-    "start": "nodemon index.js",
-    "test": "jest"
+    "dev": "nodemon index.js",
+    "start": "NODE_ENV=production node index.js",
+    "test": "jest",
+    "seed": "node ./db/seed.js"
   },
   "keywords": [],
   "author": "",
