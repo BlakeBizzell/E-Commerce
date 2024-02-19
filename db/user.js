@@ -94,7 +94,10 @@ async function loginUser(username, password) {
   await createToken(user.id, token, expirationDate, currentDate);
 
   // Return the user and token information
-  return { user: { id: user.id, username: user.username }, token };
+  return {
+    user: { id: user.id, username: user.username, admin: user.admin },
+    token,
+  };
 }
 
 // update user
