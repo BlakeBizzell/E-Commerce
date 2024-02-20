@@ -20,9 +20,7 @@ app.use(cors({ origin: "*", credentials: true }));
 app.use("/api", require("./api"));
 app.use("/auth", require("./auth"));
 
-// Export app if required by another module
 if (require.main === module) {
-  // Only start the server if the file is being executed directly
   app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
   });
